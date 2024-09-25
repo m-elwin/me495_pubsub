@@ -15,6 +15,11 @@ class PubsubNode(Node):
     ----------
     pose : turtlesim/msg/Pose - the pose of the turtle robot
 
+    Parameters
+    ----------
+    xmin : float64 - the minimum x coordinate
+    xmax : float64 - the maximum x coordinate
+
     """
 
     def __init__(self):
@@ -24,6 +29,12 @@ class PubsubNode(Node):
         self._pub = self.create_publisher(Twist, "cmd_vel", 10)
         self._sub = self.create_subscription(Pose, "pose", self.pose_callback, 10)
         self._velocity = 2.0
+        self.declare_parameter("xmin", 2.0)
+        self._xmin = self.get_parameter("xmin").value
+        self.declare_parameter("xmax", 7.0)
+        self._xmax = self.get_parameter("xmax").value
+
+        self.get_logger().debug(f"Xmin: {self._xmin} Xmax: {self._xmax}")
 
     def timer_callback(self):
         self.get_logger().debug("Timer!")
@@ -31,10 +42,10 @@ class PubsubNode(Node):
 
     def pose_callback(self, pose):
         """Update the pose of the robot"""
-        if pose.x > 7 and self._velocity > 0:
-            self._velocity *= -1
-        elif pose.x < 2 and self._velocity < 0:
-            self._velocity *= -1
+        if pose.x > self._xmax and self._velocity > 0:
+            self._velocity *= -1.0
+        elif pose.x < self._xmin and self._velocity < 0:
+            self._velocity *= -1.0
 
 
 def main(args=None):
