@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="turtlesim" exec="turtlesim_node" />
+  <node pkg="pubsub" exec="pubsub">
+    <remap from="cmd_vel" to="turtle1/cmd_vel" />
+  </node>
+</launch>
