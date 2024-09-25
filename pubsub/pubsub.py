@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, Vector3
 from turtlesim.msg import Pose
+from turtlesim.srv import Spawn
 
 class PubsubNode(Node):
     """
@@ -35,6 +36,12 @@ class PubsubNode(Node):
         self._xmax = self.get_parameter("xmax").value
 
         self.get_logger().debug(f"Xmin: {self._xmin} Xmax: {self._xmax}")
+
+        spawn_client = self.create_client(Spawn, "spawn")
+        if not spawn_client.wait_for_service(timeout_sec = 2.0):
+            raise RuntimeError("Failed to find spawn service.")
+        rclpy.spin_until_future_complete(self, spawn_client.call_async(Spawn.Request(x=self._xmin, y=5.54)))
+        rclpy.spin_until_future_complete(self, spawn_client.call_async(Spawn.Request(x=self._xmax, y=5.54)))
 
     def timer_callback(self):
         self.get_logger().debug("Timer!")

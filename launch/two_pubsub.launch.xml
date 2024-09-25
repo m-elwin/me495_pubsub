@@ -3,12 +3,13 @@
   <!-- Shows two ways of changing the namespace:
        Each node can be given a namespace explicitly
   -->
-
-  <node pkg="turtlesim" exec="turtlesim_node" namespace="ns1"/>
-  <node pkg="pubsub" exec="pubsub" namespace="ns1/turtle1">
-    <param name="xmin" value="1.0"/>
-    <param name="xmax" value="8.0"/>
-  </node>
+  <group>
+    <push_ros_namespace namespace="ns1"/>
+    <include file="$(find-pkg-share pubsub)/launch/pubsub.launch.xml" >
+      <arg name="xmin" value="0.5" />
+      <arg name="xmax" value="9.0" />
+    </include>
+  </group>
 
   <!-- Or the nodes can be grouped together -->
   <group>
