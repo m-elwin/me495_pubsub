@@ -2,8 +2,8 @@
 from geometry_msgs.msg import Twist, Vector3
 import rclpy
 from rclpy.node import Node
-from turtlesim.msg import Pose
-from turtlesim.srv import Spawn
+from turtlesim_msgs.msg import Pose
+from turtlesim_msgs.srv import Spawn
 
 
 class PubsubNode(Node):
