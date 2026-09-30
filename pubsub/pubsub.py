@@ -1,6 +1,7 @@
 """Solutions to https://nu-msr.github.io/ros_notes/ros2/activity/pubsub_activity.html."""
 from geometry_msgs.msg import Twist, Vector3
 import rclpy
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from turtlesim_msgs.msg import Pose
 from turtlesim_msgs.srv import Spawn
@@ -63,8 +64,9 @@ class PubsubNode(Node):
 
 
 def main(args=None):
-    rclpy.init(args=args)
-    pubsub_node = PubsubNode()
-    rclpy.spin(pubsub_node)
-    pubsub_node.destroy_node()
-    rclpy.shutdown()
+    try:
+        with rclpy.init(args=args):
+            pubsub_node = PubsubNode()
+            rclpy.spin(pubsub_node)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        pass
