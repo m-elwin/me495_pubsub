@@ -20,7 +20,11 @@ setup(
     maintainer_email='youremail@domain.edu',
     description='A pubsub demo',
     license='GPLv3',
-    tests_require=['pytest'],
+    extras_require={
+        'test': [
+            'pytest',
+            ],
+        },
     entry_points={
         'console_scripts': [
             'pubsub = pubsub.pubsub:main'
